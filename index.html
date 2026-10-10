@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>班級管理與隨機點名</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <h1 class="sidebar__title">班級點名系統</h1>
+      <nav class="menu" aria-label="主選單">
+        <button class="menu__item menu__item--active" type="button" data-view="classes" aria-current="page">
+          <span class="menu__icon" aria-hidden="true">🏫</span>班級管理
+        </button>
+        <button class="menu__item" type="button" data-view="students">
+          <span class="menu__icon" aria-hidden="true">👥</span>學生管理
+        </button>
+        <button class="menu__item" type="button" data-view="roll">
+          <span class="menu__icon" aria-hidden="true">🎲</span>隨機點名
+        </button>
+      </nav>
+    </aside>
+
+    <div class="main-area">
+    <main class="content">
+      <section class="view" data-view="classes" aria-labelledby="title-classes">
+        <h2 class="view__title" id="title-classes">班級管理</h2>
+        <article class="card">
+          <form id="class-form" class="inline-form" autocomplete="off">
+            <label class="visually-hidden" for="class-name">班級名稱</label>
+            <input id="class-name" class="input" type="text" maxlength="30" placeholder="輸入新班級名稱" required>
+            <button class="btn btn--primary" type="submit">新增班級</button>
+          </form>
+          <ul id="class-list" class="list"></ul>
+          <p id="class-empty" class="empty" hidden>尚無班級，請先新增一個班級。</p>
+        </article>
+      </section>
+
+      <section class="view" data-view="students" aria-labelledby="title-students" hidden>
+        <h2 class="view__title" id="title-students">學生管理</h2>
+        <article class="card">
+          <div class="field">
+            <label for="student-class" class="field__label">所屬班級</label>
+            <select id="student-class" class="input"></select>
+          </div>
+          <form id="student-form" class="inline-form" autocomplete="off">
+            <label class="visually-hidden" for="student-name">學生姓名</label>
+            <input id="student-name" class="input" type="text" maxlength="30" placeholder="輸入學生姓名" required>
+            <button class="btn btn--primary" type="submit">新增學生</button>
+          </form>
+          <ul id="student-list" class="list"></ul>
+          <p id="student-empty" class="empty" hidden></p>
+        </article>
+      </section>
+
+      <section class="view" data-view="roll" aria-labelledby="title-roll" hidden>
+        <h2 class="view__title" id="title-roll">隨機點名</h2>
+        <article class="card card--center">
+          <div class="field field--center">
+            <label for="roll-class" class="field__label">選擇班級</label>
+            <select id="roll-class" class="input"></select>
+          </div>
+          <label class="check">
+            <input id="no-repeat" type="checkbox" checked>
+            <span>不重複點名（全部點完後自動重置）</span>
+          </label>
+          <div id="roll-display" class="roll__display" aria-live="assertive">請按「點名」</div>
+          <p id="roll-info" class="roll__info"></p>
+          <div class="roll__actions">
+            <button id="roll-btn" class="btn btn--primary btn--large" type="button">點名</button>
+            <button id="roll-reset" class="btn" type="button">重置已點名單</button>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p class="footer__text">◎2026 系統開發者：林宇森</p>
+    </footer>
+    </div>
+  </div>
+
+  <dialog id="edit-dialog" class="dialog">
+    <form method="dialog" id="edit-form" class="dialog__form">
+      <h3 id="edit-title" class="dialog__title">編輯</h3>
+      <label class="visually-hidden" for="edit-input">名稱</label>
+      <input id="edit-input" class="input" type="text" maxlength="30" required>
+      <div class="dialog__actions">
+        <button class="btn" type="button" id="edit-cancel">取消</button>
+        <button class="btn btn--primary" type="submit">儲存</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="script.js"></script>
+</body>
+</html>
