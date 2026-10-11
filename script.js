@@ -5,6 +5,9 @@
   const SHUFFLE_MS = 1200;
   const SHUFFLE_INTERVAL_MS = 70;
   const VIEWS = ['classes', 'students', 'roll'];
+  const CSV_BOM = '\uFEFF';
+  const CSV_HEADERS = ['座號', '姓名'];
+  const FORMULA_PREFIX = /^[=+\-@\t\r]/;
 
   let state = loadState();
   let currentView = 'classes';
@@ -24,6 +27,7 @@
     rollClass: $('roll-class'), noRepeat: $('no-repeat'),
     rollDisplay: $('roll-display'), rollInfo: $('roll-info'),
     rollBtn: $('roll-btn'), rollReset: $('roll-reset'),
+    exportBtn: $('export-btn'),
     dialog: $('edit-dialog'), editForm: $('edit-form'),
     editTitle: $('edit-title'), editInput: $('edit-input'),
     editCancel: $('edit-cancel'),
@@ -291,6 +295,43 @@
     }, SHUFFLE_MS);
   }
 
+  /* ---------- Export ---------- */
+  function escapeCsvCell(value) {
+    let text = String(value);
+    if (FORMULA_PREFIX.test(text)) text = `'${text}`;
+    return `"${text.replace(/"/g, '""')}"`;
+  }
+
+  function sanitizeFileName(name) {
+    // eslint-disable-next-line no-control-regex
+    const cleaned = name.replace(/[\\/:*?"<>|\u0000-\u001f]/g, '_').trim();
+    return cleaned || '班級';
+  }
+
+  function buildStudentCsv(cls) {
+    const rows = [
+      CSV_HEADERS,
+      ...cls.students.map((s, i) => [i + 1, s.name]),
+    ];
+    return CSV_BOM + rows.map((row) => row.map(escapeCsvCell).join(',')).join('\r\n');
+  }
+
+  function exportStudents() {
+    const cls = getSelected();
+    if (!cls) return alert('請先建立並選擇班級。');
+    if (cls.students.length === 0) return alert('此班級沒有學生，無法匯出。');
+
+    const blob = new Blob([buildStudentCsv(cls)], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${sanitizeFileName(cls.name)}_學生名單.csv`;
+    document.body.append(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 0);
+  }
+
   /* ---------- Events ---------- */
   function bindSubmit(form, input, handler) {
     form.addEventListener('submit', (e) => {
@@ -310,7 +351,12 @@
     renderAll();
   }
 
-  els.menuItems.forEach((item) => item.addEventListener('click', () => showView(item.dataset.view)));
+  els.menuItems.forEach((item) => item.addEventListener('click', () => {
+    if (!item.dataset.view) return;
+    showView(item.dataset.view);
+  }));
+
+  els.exportBtn.addEventListener('click', exportStudents);
 
   bindSubmit(els.classForm, els.className, addClass);
   bindSubmit(els.studentForm, els.studentName, addStudent);
