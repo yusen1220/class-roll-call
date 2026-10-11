@@ -119,6 +119,14 @@ body {
   .content { padding: 2rem; }
 }
 
+@media (max-width: 30rem) {
+  .inline-form { flex-direction: column; }
+  .field { flex-direction: column; align-items: stretch; gap: 0.35rem; }
+  .field--center .input { flex: 1 1 auto; }
+  .btn--large { width: 100%; padding: 0 1rem; }
+  .roll__actions .btn { flex: 1 1 100%; }
+}
+
 .view { max-width: 48rem; margin: 0 auto; }
 .view__title { margin: 0 0 1rem; font-size: 1.5rem; }
 
@@ -188,6 +196,7 @@ body {
 
 .list__item {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 0.5rem 0.5rem 0.75rem;
@@ -196,7 +205,7 @@ body {
 }
 
 .list__select {
-  flex: 1;
+  flex: 1 1 7rem;
   min-width: 0;
   min-height: 2.25rem;
   display: flex;
@@ -225,7 +234,7 @@ body {
   padding: 1rem;
   border: 2px dashed var(--border);
   border-radius: var(--radius);
-  font-size: 2.75rem;
+  font-size: clamp(1.75rem, 8vw, 2.75rem);
   font-weight: 800;
   color: var(--primary);
   overflow-wrap: anywhere;
