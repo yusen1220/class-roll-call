@@ -68,6 +68,25 @@ body {
 .menu__item--active { background: var(--primary); color: #fff; font-weight: 700; }
 .menu__icon { font-size: 1.2rem; }
 
+/* ---------- Clock ---------- */
+.clock {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.5rem;
+  color: #cbd5e1;
+}
+
+.clock__date { margin: 0; font-size: 0.85rem; }
+
+.clock__time {
+  margin: 0;
+  color: #fff;
+  font-size: 1.6rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
 .main-area { display: flex; flex-direction: column; flex: 1; min-width: 0; }
 
 .content { flex: 1; min-width: 0; padding: 1.25rem; }
@@ -87,10 +106,13 @@ body {
     position: sticky;
     top: 0;
     align-self: flex-start;
+    display: flex;
+    flex-direction: column;
     width: var(--sidebar-width);
     min-height: 100vh;
     padding: 1.5rem 1rem;
   }
+  .clock { margin-top: auto; }
   .sidebar__title { margin-bottom: 1.5rem; }
   .menu { flex-direction: column; overflow: visible; }
   .menu__item { width: 100%; }

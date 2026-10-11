@@ -5,6 +5,7 @@
   const SHUFFLE_MS = 1200;
   const SHUFFLE_INTERVAL_MS = 70;
   const VIEWS = ['classes', 'students', 'roll'];
+  const CLOCK_INTERVAL_MS = 1000;
   const CSV_BOM = '\uFEFF';
   const CSV_HEADERS = ['座號', '姓名'];
   const FORMULA_PREFIX = /^[=+\-@\t\r]/;
@@ -28,6 +29,7 @@
     rollDisplay: $('roll-display'), rollInfo: $('roll-info'),
     rollBtn: $('roll-btn'), rollReset: $('roll-reset'),
     exportBtn: $('export-btn'),
+    clockDate: $('clock-date'), clockTime: $('clock-time'),
     dialog: $('edit-dialog'), editForm: $('edit-form'),
     editTitle: $('edit-title'), editInput: $('edit-input'),
     editCancel: $('edit-cancel'),
@@ -332,6 +334,20 @@
     setTimeout(() => URL.revokeObjectURL(url), 0);
   }
 
+  /* ---------- Clock ---------- */
+  function renderClock() {
+    const now = new Date();
+    els.clockDate.textContent = now.toLocaleDateString('zh-TW', {
+      year: 'numeric', month: 'long', day: 'numeric', weekday: 'long',
+    });
+    els.clockTime.textContent = now.toLocaleTimeString('zh-TW', { hour12: false });
+  }
+
+  function startClock() {
+    renderClock();
+    setInterval(renderClock, CLOCK_INTERVAL_MS);
+  }
+
   /* ---------- Events ---------- */
   function bindSubmit(form, input, handler) {
     form.addEventListener('submit', (e) => {
@@ -383,4 +399,5 @@
 
   ensureSelection();
   showView(currentView);
+  startClock();
 })();
